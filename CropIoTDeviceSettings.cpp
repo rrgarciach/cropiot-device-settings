@@ -6,5 +6,3 @@
 #include "ArduinoJson.h"
 #include "PubSubClient.h"
 #include "EEPROM.h"
-
-// CropIoTDeviceSettings::CropIoTDeviceSettings(String deviceName) {}

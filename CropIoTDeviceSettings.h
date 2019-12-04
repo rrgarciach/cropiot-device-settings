@@ -12,8 +12,8 @@
 
 #define DEVICE_NAME_MEM_ADDR      500 // size of 20
 #define DEVICE_PASS_MEM_ADDR      520 // size of 20
-#define MQTT_SERVER_MEM_ADDR    540 // size of 50
-#define MQTT_KEY_MEM_ADDR       690 // size of 20
+#define MQTT_SERVER_MEM_ADDR      540 // size of 50
+#define MQTT_KEY_MEM_ADDR         690 // size of 20
 String DEVICE_TYPE = "";
 
 IPAddress apLocalIP(192,168,4,1);
@@ -107,18 +107,14 @@ void connectMQTT(PubSubClient& mqttClient) {
 
   while (!mqttClient.connected() && !shouldReboot) {
     Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
     if ( mqttClient.connect(deviceName.c_str(), mqttKey.c_str(), NULL) ) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      mqttClient.publish("outTopic", "hello world");
-      // ... and resubscribe
-      mqttClient.subscribe("inTopic");
+      Serial.println("connected");.
+      // mqttClient.publish("outTopic", "hello world");
+      // mqttClient.subscribe("inTopic");
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
+      Serial.println(" retrying in 5 seconds");
       delay(5000);
     }
   }
@@ -136,14 +132,10 @@ void reconnectMQTT(PubSubClient& mqttClient) {
     // Attempt to connect
     if ( mqttClient.connect(deviceName.c_str(), mqttKey.c_str(), NULL) ) {
       Serial.println("connected");
-      // Once connected, publish an announcement...
-      mqttClient.publish("outTopic", "hello world");
-      // ... and resubscribe
-      mqttClient.subscribe("inTopic");
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
-      Serial.println(" try again in next loop");
+      Serial.println(" retrying in next loop");
     }
   }
 }
@@ -158,16 +150,16 @@ void writeMem(char add,String data){
   for(i=0; i < _size; i++)
   EEPROM.write(add+i,data[i]);
 
-  EEPROM.write(add+_size,'\0');   //Add termination null character for String Data
+  EEPROM.write(add+_size,'\0'); // Add termination null character for String Data
   EEPROM.commit();
 }
 
 String readMem(char add){
-  char data[100]; //Max 100 Bytes
+  char data[100]; // Max 100 Bytes
   int len = 0;
   unsigned char k;
   k = EEPROM.read(add);
-  while(k != '\0' && len < 500)   //Read until null character
+  while(k != '\0' && len < 500) //Read until null character
   {
     k = EEPROM.read(add+len);
     data[len] = k;
