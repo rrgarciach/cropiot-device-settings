@@ -274,7 +274,12 @@ void loadSettingsEndpoints() {
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     DynamicJsonBuffer jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
-    root["ssid"] = WiFi.SSID();
+    String host = readMem(MQTT_SERVER_MEM_ADDR);
+    String token = readMem(MQTT_KEY_MEM_ADDR);
+    String connected = String(mqttClient.connected());
+    root["host"] = host.c_str();
+    root["token"] = token.c_str();
+    root["connected"] = connected.c_str();
     root.printTo(*response);
     request->send(response);
   });
