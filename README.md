@@ -30,6 +30,24 @@ void setup() {
   wlanClient1 = generateWiFiClient();
   connectMQTT(mqttClient1);
 ```
+- Add any required device custom endpoints as `/include/device_endpoints.h`
+(and include them using `#include "../include/device_endpoints.h"`) with content similar as follows:
+```
+#ifndef DEVICE_ENDPOINTS_H_
+#define DEVICE_ENDPOINTS_H_
+
+// Device setup endpoints
+struct {
+  struct {
+    struct  {
+      const char* PH_CALIBRATE = "/api/device/ph/calibrate";
+      const char* EC_CALIBRATE = "/api/device/ec/calibrate";
+    } DEVICE;
+  } API;
+} DEVICE_URLS;
+
+#endif
+```
 
 ### Dependencies
 
