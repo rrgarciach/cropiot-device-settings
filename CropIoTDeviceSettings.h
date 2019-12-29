@@ -14,7 +14,7 @@
 #define DEVICE_PASS_MEM_ADDR      520 // size of 20
 #define MQTT_SERVER_MEM_ADDR      540 // size of 50
 #define MQTT_KEY_MEM_ADDR         690 // size of 20
-#define V1_TELEMETRY "v1/devices/me/telemetry"
+#define TB_V1_TELEMETRY "v1/devices/me/telemetry"
 String DEVICE_TYPE = "";
 
 IPAddress apLocalIP(192,168,4,1);
