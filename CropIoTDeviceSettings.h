@@ -109,7 +109,7 @@ void connectMQTT(PubSubClient& mqttClient) {
   while (!mqttClient.connected() && !shouldReboot) {
     Serial.print("Attempting MQTT connection...");
     if ( mqttClient.connect(deviceName.c_str(), mqttKey.c_str(), NULL) ) {
-      Serial.println("connected");.
+      Serial.println("connected");
       // mqttClient.publish("outTopic", "hello world");
       // mqttClient.subscribe("inTopic");
     } else {
