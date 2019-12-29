@@ -48,6 +48,39 @@ struct {
 
 #endif
 ```
+- Implement function to load device endpoints:
+```
+void loadDeviceEndpoints() {
+  server.on(DEVICE_URLS.API.DEVICE.PH_CALIBRATE, HTTP_GET, [&](AsyncWebServerRequest *request){
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject &root = jsonBuffer.createObject();
+    root["value"] = avgValue;
+    root.printTo(*response);
+    request->send(response);
+  });
+  server.on(DEVICE_URLS.API.DEVICE.PH_CALIBRATE, HTTP_POST, [&](AsyncWebServerRequest *request){
+    if(request->hasParam("ph4Reading", true) && request->hasParam("ph7Reading", true)) {
+      const String ph4Reading = request->getParam("ph4Reading", true)->value().c_str();
+      const String ph7Reading = request->getParam("ph7Reading", true)->value().c_str();
+      writeMem(PH4_READING_MEM_ADDR, ph4Reading);
+      writeMem(PH7_READING_MEM_ADDR, ph7Reading);
+      slope = calcSlope();
+      intercept = calcIntercept();
+      request->send(200);
+    } else {
+      request->send(400);
+    }
+  });
+}
+```
+- Call `loadDeviceEndpoints` on setup:
+```
+// setup()
+connectMQTT(mqttClient1);
+loadDeviceEndpoints();
+```
+
 
 ### Dependencies
 
