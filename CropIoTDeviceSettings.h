@@ -24,6 +24,8 @@ IPAddress apSubnet(255,255,255,0);
 boolean shouldReboot = false;
 
 AsyncWebServer server(80);
+WiFiClient wlanClient;
+PubSubClient mqttClient(wlanClient);
 
 void loadSettingsEndpoints();
 void logIpAddress();
@@ -33,6 +35,11 @@ void writeMem(char add,String data);
 WiFiClient generateWiFiClient() {
   WiFiClient wlanClient;
   return wlanClient;
+}
+
+PubSubClient generateMqttClient() {
+  PubSubClient mqttClient(wlanClient);
+  return mqttClient;
 }
 
 PubSubClient generateMqttClient(WiFiClient wlanClient) {
@@ -99,7 +106,7 @@ void logIpAddress() {
   Serial.println(WiFi.softAPIP());
 }
 
-void connectMQTT(PubSubClient& mqttClient) {
+void connectMQTT() {
   String deviceName = readMem(DEVICE_NAME_MEM_ADDR);
   String mqttServer = readMem(MQTT_SERVER_MEM_ADDR);
   String mqttKey = readMem(MQTT_KEY_MEM_ADDR);
@@ -121,7 +128,27 @@ void connectMQTT(PubSubClient& mqttClient) {
   }
 }
 
-void reconnectMQTT(PubSubClient& mqttClient) {
+// void connectMQTT(PubSubClient& mqttClient, String mqttServer, String mqttKey) {
+//   String deviceName = readMem(DEVICE_NAME_MEM_ADDR);
+//
+//   mqttClient.setServer(mqttServer.c_str(), 1883);
+//
+//   while (!mqttClient.connected() && !shouldReboot) {
+//     Serial.print("Attempting MQTT connection...");
+//     if ( mqttClient.connect(deviceName.c_str(), mqttKey.c_str(), NULL) ) {
+//       Serial.println("connected");
+//       // mqttClient.publish("outTopic", "hello world");
+//       // mqttClient.subscribe("inTopic");
+//     } else {
+//       Serial.print("failed, rc=");
+//       Serial.print(mqttClient.state());
+//       Serial.println(" retrying in 5 seconds");
+//       delay(5000);
+//     }
+//   }
+// }
+
+void reconnectMQTT() {
   String deviceName = readMem(DEVICE_NAME_MEM_ADDR);
   String mqttServer = readMem(MQTT_SERVER_MEM_ADDR);
   String mqttKey = readMem(MQTT_KEY_MEM_ADDR);
@@ -140,6 +167,24 @@ void reconnectMQTT(PubSubClient& mqttClient) {
     }
   }
 }
+
+// void reconnectMQTT(PubSubClient& mqttClient, String mqttServer, String mqttKey) {
+//   String deviceName = readMem(DEVICE_NAME_MEM_ADDR);
+//
+//   mqttClient.setServer(mqttServer.c_str(), 1883);
+//
+//   if (!mqttClient.connected()) {
+//     Serial.print("Attempting MQTT reconnection...");
+//     // Attempt to connect
+//     if ( mqttClient.connect(deviceName.c_str(), mqttKey.c_str(), NULL) ) {
+//       Serial.println("connected");
+//     } else {
+//       Serial.print("failed, rc=");
+//       Serial.print(mqttClient.state());
+//       Serial.println(" retrying in next loop");
+//     }
+//   }
+// }
 
 void beginMem() {
   EEPROM.begin(512);
