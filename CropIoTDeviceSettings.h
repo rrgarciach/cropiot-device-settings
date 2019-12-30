@@ -61,7 +61,6 @@ void startAP() {
     return;
   }
   WiFi.begin();
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
 }
 
@@ -217,6 +216,7 @@ String readMem(char add){
 }
 
 void loadSettingsEndpoints() {
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   // statics endpoints:
   server.serveStatic("/", SPIFFS, "/");
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -283,6 +283,7 @@ void loadSettingsEndpoints() {
     WiFi.setAutoConnect(false);
     WiFi.setAutoReconnect(false);
     request->send(201);
+    shouldReboot = true;
     WiFi.disconnect();
   });
   server.on(URLS.API.WIFI.SCAN, HTTP_GET, [](AsyncWebServerRequest *request){
