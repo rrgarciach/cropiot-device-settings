@@ -16,6 +16,7 @@
 #define MQTT_KEY_MEM_ADDR         690 // size of 20
 #define TB_V1_TELEMETRY "v1/devices/me/telemetry"
 String DEVICE_TYPE = "";
+String DEVICE_PASSWORD = "";
 
 IPAddress apLocalIP(192,168,4,1);
 IPAddress apGateway(192,168,4,0);
@@ -52,10 +53,10 @@ void startAP() {
   String apPass = readMem(DEVICE_PASS_MEM_ADDR);
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(apLocalIP, apGateway, apSubnet);
-  if (apPass == "")
-    WiFi.softAP(apName);
-  else
-    WiFi.softAP(apName, apPass);
+  // if (apPass == "")
+  //   WiFi.softAP(apName);
+  // else
+    WiFi.softAP(apName, DEVICE_PASSWORD);
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
