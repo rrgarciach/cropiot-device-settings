@@ -53,9 +53,9 @@ void startAP() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(apLocalIP, apGateway, apSubnet);
   if (apPass == "")
-    WiFi.softAP(apName.c_str());
+    WiFi.softAP(apName);
   else
-    WiFi.softAP(apName.c_str(), apPass.c_str());
+    WiFi.softAP(apName, apPass);
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
@@ -234,11 +234,12 @@ void loadSettingsEndpoints() {
     request->send(response);
   });
   server.on(URLS.API.DEVICE, HTTP_POST, [&](AsyncWebServerRequest *request){
-    if(request->hasParam("deviceName", true) && request->hasParam("devicePass", true)) {
+    if(request->hasParam("deviceName", true)) {
+    // if(request->hasParam("deviceName", true) && request->hasParam("devicePass", true)) {
       const String deviceName = request->getParam("deviceName", true)->value().c_str();
-      const String devicePass = request->getParam("devicePass", true)->value().c_str();
+      // const String devicePass = request->getParam("devicePass", true)->value().c_str();
       writeMem(DEVICE_NAME_MEM_ADDR, deviceName);
-      writeMem(DEVICE_PASS_MEM_ADDR, devicePass);
+      // writeMem(DEVICE_PASS_MEM_ADDR, devicePass);
       AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
       request->send(200);
       shouldReboot = true;
