@@ -53,9 +53,9 @@ void startAP() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(apLocalIP, apGateway, apSubnet);
   if (apPass == "")
-    WiFi.softAP(apName);
+    WiFi.softAP(apName.c_str());
   else
-    WiFi.softAP(apName, apPass);
+    WiFi.softAP(apName.c_str(), apPass.c_str());
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
