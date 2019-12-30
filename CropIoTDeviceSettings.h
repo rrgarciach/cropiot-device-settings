@@ -252,6 +252,7 @@ void loadSettingsEndpoints() {
     DynamicJsonBuffer jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
     root["ssid"] = WiFi.SSID();
+    root["connected"] = WiFi.isConnected();
     root.printTo(*response);
     request->send(response);
   });
@@ -344,9 +345,15 @@ void loadSettingsEndpoints() {
     }
   });
 
-  server.onNotFound([](AsyncWebServerRequest *request){
-    request->send(404);
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+  server.onNotFound([](AsyncWebServerRequest *request) {
+    if (request->method() == HTTP_OPTIONS) {
+      request->send(200);
+    } else {
+      request->send(404);
+    }
   });
+
 }
 
 #endif
