@@ -216,6 +216,7 @@ String readMem(char add){
 }
 
 void loadSettingsEndpoints() {
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   // statics endpoints:
   server.serveStatic("/", SPIFFS, "/");
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -345,7 +346,6 @@ void loadSettingsEndpoints() {
     }
   });
 
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.onNotFound([](AsyncWebServerRequest *request) {
     if (request->method() == HTTP_OPTIONS) {
       request->send(200);
