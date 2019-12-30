@@ -68,7 +68,7 @@ void startAP() {
 void connectWiFi() {
   EEPROM.begin(512);
   Serial.print("Device Name: \"");Serial.print(readMem(DEVICE_NAME_MEM_ADDR));Serial.println("\"");
-  Serial.print("Device Password: \"");Serial.print(readMem(DEVICE_PASS_MEM_ADDR));Serial.println("\"");
+  Serial.print("Device Password: \"");Serial.print(DEVICE_PASSWORD);Serial.println("\"");
   Serial.print("MQTT server: \"");Serial.print(readMem(MQTT_SERVER_MEM_ADDR));Serial.println("\"");
   Serial.print("MQTT Key: \"");Serial.print(readMem(MQTT_KEY_MEM_ADDR));Serial.println("\"");
   loadSettingsEndpoints();
