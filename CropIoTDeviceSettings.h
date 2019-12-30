@@ -61,6 +61,7 @@ void startAP() {
     return;
   }
   WiFi.begin();
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
 }
 
@@ -216,7 +217,6 @@ String readMem(char add){
 }
 
 void loadSettingsEndpoints() {
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   // statics endpoints:
   server.serveStatic("/", SPIFFS, "/");
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
