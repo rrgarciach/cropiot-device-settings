@@ -53,9 +53,9 @@ void startAP() {
   String apPass = readMem(DEVICE_PASS_MEM_ADDR);
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(apLocalIP, apGateway, apSubnet);
-  // if (apPass == "")
-  //   WiFi.softAP(apName);
-  // else
+  if (apPass == "")
+    WiFi.softAP(apName);
+  else
     WiFi.softAP(apName, DEVICE_PASSWORD);
   if(!SPIFFS.begin()){
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -256,6 +256,7 @@ void loadSettingsEndpoints() {
     JsonObject &root = jsonBuffer.createObject();
     root["ssid"] = WiFi.SSID();
     root["connected"] = WiFi.isConnected();
+    root["ip"] = WiFi.localIP();
     root.printTo(*response);
     request->send(response);
   });
