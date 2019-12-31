@@ -256,7 +256,7 @@ void loadSettingsEndpoints() {
     JsonObject &root = jsonBuffer.createObject();
     root["ssid"] = WiFi.SSID();
     root["connected"] = WiFi.isConnected();
-    root["ip"] = WiFi.localIP();
+    root["ip"] = String(WiFi.localIP());
     root.printTo(*response);
     request->send(response);
   });
