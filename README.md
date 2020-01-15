@@ -77,7 +77,7 @@ void loadDeviceEndpoints() {
 - Call `loadDeviceEndpoints` on setup:
 ```
 // setup()
-connectMQTT(mqttClient1);
+connectMQTT();
 loadDeviceEndpoints();
 ```
 

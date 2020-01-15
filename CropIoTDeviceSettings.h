@@ -94,7 +94,7 @@ void reconnectWiFi() {
     delay(1000);
     Serial.println("Reconnecting to WiFi..");
   }
-  if (!WiFi.isConnected()) {
+  if (WiFi.isConnected()) {
     Serial.println("Reconnected!");
     logIpAddress();
   }
