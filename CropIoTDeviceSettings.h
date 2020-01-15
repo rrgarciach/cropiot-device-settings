@@ -50,7 +50,7 @@ PubSubClient generateMqttClient(WiFiClient wlanClient) {
 
 void startAP() {
   String apName = readMem(DEVICE_NAME_MEM_ADDR);
-  String apPass = readMem(DEVICE_PASS_MEM_ADDR);
+  String apPass = DEVICE_PASSWORD;
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(apLocalIP, apGateway, apSubnet);
   if (apPass == "")
